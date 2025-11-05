@@ -1,0 +1,40 @@
+{
+  "name": "daily-quotes-bot",
+  "version": "1.0.0",
+  "description": "بوت Telegram يرسل اقتباسات يومية تلقائيًا",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "^0.61.0",
+    "node-schedule": "^2.1.1"
+  }
+}
+    quote = quotes[index]
+    bot.send_message(chat_id=CHAT_ID, text=f"🌟 اقتباس اليوم 🌟\n\n{quote}")
+
+    with open(index_file, "w") as f:
+        json.dump({"index": index + 1}, f)
+
+    print(f"[{datetime.now()}] أُرسل الاقتباس رقم {index + 1}")
+
+# ضبط الجدولة اليومية
+schedule.every().day.at("09:00").do(send_daily_quote)
+
+def run_schedule():
+    while True:
+        schedule.run_pending()
+        time.sleep(30)
+
+# Flask لإبقاء السيرفر شغال
+app = Flask(__name__)
+
+@app.route("/")
+def home():
+    return "🤖 البوت يعمل بنجاح على Render ويُرسل اقتباسًا يوميًا!"
+
+Thread(target=run_schedule).start()
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8080)
